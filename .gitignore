@@ -25,6 +25,7 @@ var/
 *.egg
 *.db
 db_repository/
+.DS_Store
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
