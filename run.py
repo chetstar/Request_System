@@ -1,5 +1,6 @@
 #!flask/bin/python
 from app import app
-app.run(debug=True)
-
+if __name__ == '__main__':
+    app.config["SECRET_KEY"] = "ITSASECRET"
+    app.run(port=5000,debug=True)
 # do not forget to make your script executable chmod a+x run.py		

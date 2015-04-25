@@ -1,6 +1,7 @@
 Flask==0.10.1
 Flask-Bootstrap==3.1.1.2
 Flask-LDAP==0.1.6
+Flask-Login==0.2.11
 Flask-Migrate==1.2.0
 Flask-SQLAlchemy==2.0
 Flask-Script==2.0.5
@@ -19,6 +20,7 @@ decorator==3.4.2
 itsdangerous==0.24
 pbr==0.10.8
 python-ldap==2.4.19
+simpleldap==0.8
 six==1.9.0
 sqlalchemy-migrate==0.9.6
 sqlparse==0.1.15
