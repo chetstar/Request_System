@@ -24,20 +24,28 @@ class User(UserMixin):
 
 USERS = {
 1: User(u"Notch", 1),
-195048015249884310307534473617759227526: User(u"Steve", 2),
+u'92bce19df203964b9dbbe7911f074e86': User(u"Chet", u'92bce19df203964b9dbbe7911f074e86'),
 4: User(u"Stevex", 4),
 3: User(u"Creeper", 3, False),
+u'seven': User(u'Bob',u'seven')
 } 
 
 
 @login_manager.user_loader
 def load_user(id):
   print 'during the load_user'
-  print USERS.get(int((id)) )
-  return USERS.get(int((id)) )
+  print USERS.get(((id)) )
+  return USERS.get(((id)) )
 
+@app.route("/logout")
+# @login_required
+def logout():
+    logout_user()
+    flash("Logged Out.")
+    return redirect(url_for("login"))
 
 @app.route("/",methods=["GET"])
+@app.route("/index",methods=["GET"])
 def index():
     return Response(response="Hello World!",status=200)
 
@@ -54,15 +62,15 @@ def login():
         l = ldap.initialize("ldap://10.129.18.101")
         l.simple_bind_s("program\%s" % form.username.data,form.password.data)
         print "Authentification Successful"
-        r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID'])
+        r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
         email=r[0][1]['mail'][0]   
-        GUID=r[0][1]['objectGUID'][0]    
+        GUID=r[0][1]['objectGUID'][0]   
+        FullName=r[0][1]['displayName'][0] 
         import uuid
         guid = uuid.UUID(bytes=GUID)
-        print guid.int
-        print USERS.get((guid.int))
-        login_user(load_user(1),remember=True)
-        import pdb;pdb.set_trace()
+        print form.remember_me.data
+        login_user(load_user(unicode(guid.hex)),remember=form.remember_me.data)
+        # import pdb;pdb.set_trace()
         flash("Logged in successfully.")
         return redirect(request.args.get("next") or url_for("protected"))
     return render_template("login.html", form=form)
