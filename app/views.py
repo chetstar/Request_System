@@ -23,8 +23,8 @@ class User(UserMixin):
     return self.active   
 
 USERS = {
-'\x92\xbc\xe1\x9d\xf2\x03\x96K\x9d\xbb\xe7\x91\x1f\x07N\x86': User(u"Notch", 1),
-2: User(u"Steve", 2),
+1: User(u"Notch", 1),
+195048015249884310307534473617759227526: User(u"Steve", 2),
 4: User(u"Stevex", 4),
 3: User(u"Creeper", 3, False),
 } 
@@ -32,7 +32,9 @@ USERS = {
 
 @login_manager.user_loader
 def load_user(id):
-  return USERS.get(id) 
+  print 'during the load_user'
+  print USERS.get(int((id)) )
+  return USERS.get(int((id)) )
 
 
 @app.route("/",methods=["GET"])
@@ -54,9 +56,13 @@ def login():
         print "Authentification Successful"
         r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID'])
         email=r[0][1]['mail'][0]   
-        GUID=r[0][1]['objectGUID'][0]     
+        GUID=r[0][1]['objectGUID'][0]    
+        import uuid
+        guid = uuid.UUID(bytes=GUID)
+        print guid.int
+        print USERS.get((guid.int))
+        login_user(load_user(1),remember=True)
         import pdb;pdb.set_trace()
-        login_user(load_user(2),remember=True)
         flash("Logged in successfully.")
         return redirect(request.args.get("next") or url_for("protected"))
     return render_template("login.html", form=form)
