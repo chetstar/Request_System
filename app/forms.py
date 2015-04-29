@@ -1,42 +1,38 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, BooleanField,SubmitField
-from wtforms.validators import DataRequired
-from wtforms import TextField, PasswordField, validators
+from wtforms import TextField, BooleanField, SubmitField, DateField,TextAreaField,SelectMultipleField,IntegerField,PasswordField,StringField,DateTimeField,RadioField
+from wtforms import validators
+from wtforms import widgets
 
 class LoginForm(Form):
-    username = StringField('ACBHCS login', validators=[DataRequired()])
+    username = StringField('ACBHCS login', validators=[validators.DataRequired()])
     password = PasswordField('Password', [validators.Required()])
     remember_me = BooleanField('remember_me', default=False)
     submit=SubmitField('Submit')
 
 class Request(Form):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    guid = db.Column(db.String(64), index=True, unique=True)
-    requestDate= db.Column(db.Date)
-    requestDeadlineLapse= db.Column(db.Integer)
-    requestedBy= db.Column(db.String(64), index=True)
-    deadline= db.Column(db.Date)
-    priority= db.Column(db.String(64), index=True)
-    deliveryFormat= db.Column(db.String(64), index=True)
-    timeframe= db.Column(db.String(64), index=True)
-    increments= db.Column(db.String(64), index=True)
-    specialPop= db.Column(db.String(64), index=True)
-    agency= db.Column(db.String(64), index=True)
-    ru = db.Column(db.String(64), index=True)
-    typeOfService= db.Column(db.String(64), index=True)
-    dataElements= db.Column(db.String(64), index=True)
-    briefDescription= db.Column(db.String(64), index=True)
-    longDescription= db.Column(db.String(64), index=True)
-    specialInstructions= db.Column(db.String(64), index=True)
-    audience= db.Column(db.String(64), index=True)
-    purpose= db.Column(db.String(64), index=True)
-    columnsRequired= db.Column(db.String(64), index=True)
-    assinged= db.Column(db.String(64), index=True)
-    completeDate= db.Column(db.Date)
-    reviewed= db.Column(db.String(64), index=True)
-    userCategory= db.Column(db.String(64), index=True,
-
-    def __repr__(self):
-        return '<%r>' % (self.briefDescription)
+    username = TextField('Project *', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    email = TextField('Project *', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    guid = TextField('Project *', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    requestDate= DateTimeField( 'Deadline',  format='%c',validators = [validators.Required()])
+    requestDeadlineLapse= IntegerField('Lapse between ')
+    requestedBy= TextField('If requesting for someone else, who?') 
+    deadline= DateTimeField( 'Deadline',  format='%c',validators = [validators.Required()])
+    priority= RadioField('Label', choices=[('value','description'),('value_two','whatever')],coerce=unicode)
+    deliveryFormat= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    timeframe= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    increments= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    specialPop= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    agency= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    ru = TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    typeOfService= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    dataElements= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    briefDescription= TextAreaField('Goal', [validators.Required(),validators.Length(min=2, max=200,message='not the right length')])
+    longDescription= TextAreaField('Goal', [validators.Required(),validators.Length(min=2, max=200,message='not the right length')])
+    specialInstructions= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    audience= TextAreaField('Goal', [validators.Required(),validators.Length(min=2, max=200,message='not the right length')])
+    purpose= TextAreaField('Goal', [validators.Required(),validators.Length(min=2, max=200,message='not the right length')])
+    columnsRequired= TextAreaField('Goal', [validators.Required(),validators.Length(min=2, max=200,message='not the right length')])
+    assinged= TextField('If requesting for someone else, who?') 
+    completeDate= DateTimeField( 'Deadline',  format='%c',validators = [validators.Required()])
+    reviewed= TextField('', [validators.Required(),validators.Length(min=2, max=50)] ) 
+    userCategory= RadioField('Label', choices=[('value','description'),('value_two','whatever')],coerce=unicode)
