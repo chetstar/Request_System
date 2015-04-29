@@ -1,5 +1,5 @@
 import os
-from flask.ext.ldap import LDAP, login_required
+# from flask.ext.ldap import LDAP, login_required
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 

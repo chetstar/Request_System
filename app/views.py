@@ -50,29 +50,34 @@ def index():
     return Response(response="Hello World!",status=200)
 
 
-@app.route("/protected/",methods=["GET"])
+@app.route("/start",methods=["GET"])
 @login_required
-def protected():
-    return Response(response="Hello Protected World!", status=200)
+def start():
+    return render_template("start.html",
+      email=request.args.get('email'), FullName=request.args.get('FullName'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        l = ldap.initialize("ldap://10.129.18.101")
-        l.simple_bind_s("program\%s" % form.username.data,form.password.data)
-        print "Authentification Successful"
-        r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
-        email=r[0][1]['mail'][0]   
-        GUID=r[0][1]['objectGUID'][0]   
-        FullName=r[0][1]['displayName'][0] 
-        import uuid
-        guid = uuid.UUID(bytes=GUID)
-        print form.remember_me.data
-        login_user(load_user(unicode(guid.hex)),remember=form.remember_me.data)
-        # import pdb;pdb.set_trace()
-        flash("Logged in successfully.")
-        return redirect(request.args.get("next") or url_for("protected"))
+        try:
+            l = ldap.initialize("ldap://10.129.18.101")
+            l.simple_bind_s("program\%s" % form.username.data,form.password.data)
+            print "Authentification Successful"
+            r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
+            email=r[0][1]['mail'][0]   
+            GUID=r[0][1]['objectGUID'][0]   
+            FullName=r[0][1]['displayName'][0] 
+            import uuid
+            guid = uuid.UUID(bytes=GUID)
+            print form.remember_me.data
+            import pdb;pdb.set_trace()
+            login_user(User(FullName,unicode(guid.hex)),remember=form.remember_me.data)
+            flash("Logged in successfully.")
+            return redirect(request.args.get("next") or url_for("start",email=email,FullName=FullName))
+        except Exception as e:
+            flash("Invalid Credentials.")
+            return render_template("login.html", form=form)
     return render_template("login.html", form=form)
 # USERS.get('\x92\xbc\xe1\x9d\xf2\x03\x96K\x9d\xbb\xe7\x91\x1f\x07N\x86')
 # @app.route('/')
