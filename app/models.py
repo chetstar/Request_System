@@ -1,13 +1,51 @@
 from app import db
+from flask.ext.login import LoginManager, UserMixin
 
+ # class User(db.Model, UserMixin):
+ #  name = db.Column(db.String(64), index=True)
+ #  email = db.Column(db.String(120), index=True, unique=True)
+ #  id = db.Column(db.String(120), index=True, unique=True)
+
+
+ #  def __init__(self, name, id, active=True):
+ #    self.name = name
+ #    self.id = id
+ #    self.active = active 
+
+ #  def is_authenticated(self):
+ #    return True
+
+ #  def is_active(self):
+ #    return self.active  
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    guid = db.Column(db.Integer)
+    """An admin user capable of viewing reports.
 
-    def __repr__(self):
-        return '<User %r>' % (self.nickname)
+    :param str email: email address of user
+    :param str password: encrypted password for the user
+
+    """
+    __tablename__ = 'user'
+
+    name=db.Column(db.String)
+    email = db.Column(db.String, primary_key=True)
+    authenticated = db.Column(db.Boolean, default=True)
+
+    def is_active(self):
+        """True, as all users are active."""
+        return True
+
+    def get_id(self):
+        """Return the email address to satisfy Flask-Login's requirements."""
+        return self.email
+
+    def is_authenticated(self):
+        """Return True if the user is authenticated."""
+        return self.authenticated
+
+    def is_anonymous(self):
+        """False, as anonymous users aren't supported."""
+        return False
+
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
