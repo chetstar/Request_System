@@ -9,8 +9,9 @@
          <div class='col-sm-6'><div class="well">
         <div class="container">
 
-
-  {{ wtf.quick_form(form) }}
+{% for field in requestlist %}
+  {{field.username}} {{field.jobTitle}} requested{{field.requestDate}} Deadline {{field.deadlinedate.strftime('%b %d %Y' )}} <br>
+  {%endfor%}
     <div class='col-sm-4'></div>
    <div class="row">     </div></div></div>    
 {% endblock %}

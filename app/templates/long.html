@@ -2,12 +2,95 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+
 {% block content %}
 
   <h1>Hi {{name}} </h1>
-  <form>
-<p>{{ wtf.form_field(form.shortForm) }}</p>
+
+
+
+  <div class="well">
+        <div class="container"
+    
+            <div class="row ">
+
+<div class="container">
+    <div class="row">
+<form method=post >   
+
+<h3>Have you verified your request is not in an existing 
+<a href="http://covecontext/RunDashboard.i4?dashUUID=2e74cf96-b33b-4a7a-b53f-4310ce259dc6&primaryOrg=1&clientOrg=1">dashboard?</a></h3>
+<p>{{ wtf.form_field(form.emanio) }}</p> 
+
+<h3>How do you want to refer to this request?</h3>
+<p>{{ wtf.form_field(form.jobTitle) }}</p>       
+<h3>Is this MHS or SUD Services related?</h3>
+<p>{{ wtf.form_field(form.MHorSUD) }}</p> <br>
+
+   <div class="row ">
+    <div class="span3">
+                 <label>           When would you like to recieve this by?
+
+                        </label>
+<input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="deadlinedate"  type="text" value="{{ form.deadlinedate.data }}" name="deadlinedate" required></input>  </div><div class="span1.5">{{ wtf.form_field(form.deadlinetime) }}</div><div class="span4.5">{{ wtf.form_field(form.deadlineWhy) }}</div>
+  <div class="row ">
+    <div class="span8">
+<br>
+<h3>{{ form.audience.label }}</h3>
+<p>{{ wtf.form_field(form.audience) }}</p> 
+
+<h3>{{ form.longDescription.label }}</h3>
+<p>{{ wtf.form_field(form.longDescription) }}</p> 
+
+<h3>{{ form.keyQuestions.label }}</h3>
+<p>{{ wtf.form_field(form.keyQuestions) }}</p> 
+
+<h3>{{ form.problem.label }}</h3>
+<p>{{ wtf.form_field(form.problem) }}</p> 
+
+
+
+<h3>{{ form.columnsRequired.label }}</h3>
+<p>{{ wtf.form_field(form.columnsRequired) }}</p> 
+
+<h3>{{ form.agency.label }}</h3>
+<p>{{ wtf.form_field(form.agency) }}</p> 
+
+<h3>{{ form.ru.label }}</h3>
+<p>{{ wtf.form_field(form.ru) }}</p> 
+
+<h3>{{ form.priority.label }}</h3>
+<p>{{ wtf.form_field(form.priority) }}</p> 
+
+<h3>{{ form.requestedBy.label }}</h3>
+<p>{{ wtf.form_field(form.requestedBy) }}</p> 
+
+<h3>{{ form.timeframe.label }}</h3>
+<p>{{ wtf.form_field(form.timeframe) }}</p> 
+
+<h3>{{ form.timeBreakdown.label }}</h3>
+<p>{{ wtf.form_field(form.timeBreakdown) }}</p> 
+
+<h3>{{ form.specialPop.label }}</h3>
+<p>{{ wtf.form_field(form.specialPop) }}</p> 
+
+<h3>{{ form.typeOfService.label }}</h3>
+<p>{{ wtf.form_field(form.typeOfService) }}</p> 
+<h3>{{ form.specialInstructions.label }}</h3>
+<p>{{ wtf.form_field(form.specialInstructions) }}</p> 
+<h3>{{ form.specialFacts.label }}</h3>
+<p>{{ wtf.form_field(form.specialFacts) }}</p> 
+
 <p>{{ wtf.form_field(form.submit) }}</p>
-  <input class="btn btn-default" id="submit" name="submit" value="Submit" type="submit">
-  </form>
+
+
+</form>
+  <!-- {{ wtf.quick_form(form) }} -->
+ 
+      </span>
+  </div>
+</div>  </div>
+</div>  </div>
+</div>
 {% endblock %}
+

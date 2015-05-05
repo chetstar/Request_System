@@ -2,18 +2,36 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block content %}
-  <h1>Hi </h1>{{name}}
-  <label class="control-label" for="deadline">
 
-                            Deadline (mm/dd/yyyy)
+{% block content %}
+
+  <h1>Hi {{name}} </h1>
+  <div class="well">
+        <div class="container"
+    
+            <div class="row ">
+       <form>
+
+
+
+                 <label>           Deadline (mm/dd/yyyy)
 
                         </label>
-<input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="deadline"  type="text" value="{{ form.deadline.data }}" name="deadline" required></input>
-<br><br>
- <form>
-  Select a time:
-  <input type="time" name="usr_time">
-</form>
+<input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="deadlinedatetime"  type="text" value="{{ form.deadlinedatetime.data }}" name="deadlinedatetime" required></input>
+what hour? HH:MM
+   <input type="time" name="usr_time">
 
+<br>
+
+  <!-- 
+
+  <input class="btn btn-default" id="submit" name="submit" value="Submit" type="submit"> -->
+  {{ wtf.quick_form(form) }}
+  </form>
+      </span>
+  </div>
+</div>  </div>
+</div>  </div>
+</div>
 {% endblock %}
+
