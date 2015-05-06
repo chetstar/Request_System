@@ -56,7 +56,7 @@ class Request(db.Model):
     keyQuestions= db.Column(db.String(64), index=True)
     problem= db.Column(db.String(64), index=True)
     specialFacts= db.Column(db.String(64), index=True)
-    requestDate= db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    requestDate= db.Column(db.DateTime, index=True)
     requestDeadlineLapse= db.Column(db.Integer)
     requestedBy= db.Column(db.String(64), index=True)
     deadlinedate= db.Column(db.Date)
@@ -68,7 +68,7 @@ class Request(db.Model):
     agency= db.Column(db.String(64), index=True)
     ru = db.Column(db.String(64), index=True)
     typeOfService= db.Column(db.String(64), index=True)
-    jobTitle= db.Column(db.String(64), index=True)
+    jobTitle= db.Column(db.String(64), unique=True)
     longDescription= db.Column(db.String(64), index=True)
     specialInstructions= db.Column(db.String(64), index=True)
     audience= db.Column(db.String(64), index=True)
@@ -77,7 +77,11 @@ class Request(db.Model):
     completeDate= db.Column(db.Date)
     reviewed= db.Column(db.String(64), index=True)
     userCategory= db.Column(db.String(64), index=True)
-
+    deadlinetime =db.Column(db.Integer)
+    deadlineWhy =  db.Column(db.String(64), index=True)
+    timeframestart =db.Column(db.Date)
+    timeframeend= db.Column(db.Date)
+    note= db.Column(db.String(120), index=True)
 
     def __repr__(self):
         return '<%r>' % (self.jobTitle)

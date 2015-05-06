@@ -3,7 +3,7 @@ from app import app,models, db
 from flask.ext.login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 from forms import LoginForm, Request, Which
 import ldap
-
+import datetime
 
 login_manager = LoginManager()
 login_manager.init_app(app) 
@@ -72,22 +72,12 @@ def start():
         # import pdb;pdb.set_trace()
         print form.formtype.data
         if form.formtype.data==u"Short":
-            print 'True short'
-            return redirect(url_for("short",))
+            WHICH=1
         else:
-            print 'True long'
-            return redirect(url_for("long",))
-    return render_template("start.html",email=g.user.email,name=g.user.name,form=form)
+            WHICH=2
+        return redirect(url_for("requestform",WHICH=WHICH))
+    return render_template("start.html",email=g.user.email,name=g.user.name,form=form,)
 
-@app.route("/short",methods=["GET","POST"])
-@login_required
-def short():
-    form = Request()
-    # import pdb;pdb.set_trace()
-    if form.validate_on_submit():
-      print 'submit'
-      # import pdb;pdb.set_trace()
-    return render_template("short.html",email=g.user.email,name=g.user.name,form=form)
 
 @app.route("/requests",methods=["GET","POST"])
 @login_required
@@ -95,49 +85,36 @@ def requests():
     requestlist=models.Request.query.all()
     return render_template("requests.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
 
-@app.route("/long",methods=["GET","POST"])
+@app.route("/followup",methods=["GET","POST"])
 @login_required
-def long():
+def followup():
+    # import pdb;pdb.set_trace()
+    requestlist= models.Request.query.filter_by(email=g.user.email).all() 
+    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+
+    
+@app.route("/requestform/<WHICH>",methods=["GET","POST"])
+@login_required
+def requestform(WHICH):
     form = Request()
     # import pdb;pdb.set_trace()
-    if request.method == 'POST' and  form.submit.data:
+    if form.validate_on_submit():
       print 'submit'
       # import pdb;pdb.set_trace()
       p=models.Request(email=g.user.email,username=g.user.name,jobTitle=form.jobTitle.data,deadlinedate=form.deadlinedate.data,emanio=form.emanio.data,MHorSUD=form.MHorSUD.data,
         keyQuestions=form.keyQuestions.data, problem=form.problem.data,specialFacts=form.specialFacts.data,requestedBy=form.requestedBy.data, priority=form.priority.data,
-        timeframe=form.timeframe.data,timeBreakdown=form.timeBreakdown.data,specialPop=form.specialPop.data,agency=form.agency.data)
+        timeframe=form.timeframe.data,timeBreakdown=form.timeBreakdown.data,specialPop=form.specialPop.data,agency=form.agency.data,ru=form.ru.data,
+         specialInstructions=form.specialInstructions.data, typeOfService=form.typeOfService.data, timeframestart=form.timeframestart.data, timeframeend=form.timeframeend.data, 
+         longDescription=form.longDescription.data, requestDate=datetime.datetime.utcnow(),
+         audience=form.audience.data,  columnsRequired=form.columnsRequired.data, deadlinetime=int(form.deadlinetime.data), deadlineWhy=form.deadlineWhy.data)
       db.session.add(p)
       db.session.commit()
-      return redirect(url_for('requests'))
-    #       username = db.Column(db.String(64), index=True, unique=True)
-    # email = db.Column(db.String(120), index=True, unique=True)
-    # emanio= db.Column(db.Integer)
-    # MHorSUD= db.Column(db.String(64), index=True)
-    # keyQuestions= db.Column(db.String(64), index=True)
-    # problem= db.Column(db.String(64), index=True)
-    # specialFacts= db.Column(db.String(64), index=True)
-    # requestDate= db.Column(db.Date)
-    # requestDeadlineLapse= db.Column(db.Integer)
-    # requestedBy= db.Column(db.String(64), index=True)
-    # deadlinedate= db.Column(db.DateTime)
-    # priority= db.Column(db.String(64), index=True)
-    # deliveryFormat= db.Column(db.String(64), index=True)
-    # timeframe= db.Column(db.String(64), index=True)
-    # timeBreakdown= db.Column(db.String(64), index=True)
-    # specialPop= db.Column(db.String(64), index=True)
-    # agency= db.Column(db.String(64), index=True)
-    # ru = db.Column(db.String(64), index=True)
-    # typeOfService= db.Column(db.String(64), index=True)
-    # jobTitle= db.Column(db.String(64), index=True)
-    # longDescription= db.Column(db.String(64), index=True)
-    # specialInstructions= db.Column(db.String(64), index=True)
-    # audience= db.Column(db.String(64), index=True)
-    # columnsRequired= db.Column(db.String(64), index=True)
-    # assinged= db.Column(db.String(64), index=True)
-    # completeDate= db.Column(db.Date)
-    # reviewed= db.Column(db.String(64), index=True)
-    # userCategory= db.Column(db.String(64), index=True)
-    return render_template("long.html",email=g.user.email,name=g.user.name,form=form)
+      return redirect(url_for('followup'))
+    if WHICH=='1':
+        print 'short!!'
+        return render_template("short.html",email=g.user.email,name=g.user.name,form=form)
+    else:
+        return render_template("long.html",email=g.user.email,name=g.user.name,form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
