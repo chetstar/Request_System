@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 # manager.add_command('db', MigrateCommand)
 
 Bootstrap(app)
-
+app.config["SECRET_KEY"] = "ITSASECRET"
 
 
 from app import views, models

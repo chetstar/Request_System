@@ -23,6 +23,8 @@
 <form method=post >   
    <div class="row ">
     <div class="span8">
+    
+     {{ form.hidden_tag() }}
 <h3>Have you verified your request is not in an existing <a href="http://covecontext/RunDashboard.i4?dashUUID=2e74cf96-b33b-4a7a-b53f-4310ce259dc6&primaryOrg=1&clientOrg=1">dashboard?</a></h3>
 <p>{{ wtf.form_field(form.emanio) }}</p> </div></div>
    <div class="row ">

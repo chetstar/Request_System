@@ -58,15 +58,10 @@ def logout():
     # import pdb;pdb.set_trace()
     return redirect(url_for("login"))
 
-@app.route("/",methods=["GET"])
-@app.route("/index",methods=["GET"])
-def index():
-    return Response(response="Hello World!",status=200)
 
-
-@app.route("/start",methods=["GET","POST"])
+@app.route("/pickaform",methods=["GET","POST"])
 @login_required
-def start():
+def pickaform():
     form = Which()
     if form.validate_on_submit():
         # import pdb;pdb.set_trace()
@@ -106,17 +101,19 @@ def requestform(WHICH):
         timeframe=form.timeframe.data,timeBreakdown=form.timeBreakdown.data,specialPop=form.specialPop.data,agency=form.agency.data,ru=form.ru.data,
          specialInstructions=form.specialInstructions.data, typeOfService=form.typeOfService.data, timeframestart=form.timeframestart.data, timeframeend=form.timeframeend.data, 
          longDescription=form.longDescription.data, requestDate=datetime.datetime.utcnow(),
-         audience=form.audience.data,  columnsRequired=form.columnsRequired.data, deadlinetime=int(form.deadlinetime.data), deadlineWhy=form.deadlineWhy.data)
+         audience=form.audience.data,  columnsRequired=form.columnsRequired.data, deadlinetime=form.deadlinetime.data, deadlineWhy=form.deadlineWhy.data)
       db.session.add(p)
       db.session.commit()
       return redirect(url_for('followup'))
+    else:
+        flash('validation fail')
     if WHICH=='1':
         print 'short!!'
         return render_template("short.html",email=g.user.email,name=g.user.name,form=form)
     else:
         return render_template("long.html",email=g.user.email,name=g.user.name,form=form)
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/request/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -142,7 +139,7 @@ def login():
             g.email=email
             session['logged_in'] = True
             # import pdb;pdb.set_trace()
-            return redirect(request.args.get("next") or url_for("start"))
+            return redirect(request.args.get("next") or url_for("pickaform"))
         except Exception as e:
             flash("Invalid Credentials.")
             return render_template("login.html", form=form)
